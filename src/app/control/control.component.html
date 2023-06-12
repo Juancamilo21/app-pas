@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>LibraryAlert</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-segment (ionChange)="segmentChanged($event)">
+
+    <ion-segment-button value="control">
+      <ion-icon name="speedometer" class="ion-30"></ion-icon>
+      <ion-label>Control</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="historial">
+      <ion-icon name="calendar" class="ion-30"></ion-icon>
+      <ion-label>Historial</ion-label>
+    </ion-segment-button>
+
+  </ion-segment>
+
+  <ion-list *ngIf="section === 'control'">
+    <ion-item>
+      <span>Apagar / Encender</span>
+      <ion-toggle slot="end" [checked]="powerValue === 1" (ionChange)="powerDevice()" color="primary"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <span>Dispositivo: {{ powerText }}</span>
+    </ion-item>
+
+    <ion-item>
+      <!-- 
+        <ion-range (ionChange)="rangeUmbralValue($event)" color="primary" value="{{ umbralValue }}">
+          <ion-icon slot="start" name="mic-off"></ion-icon>
+          <ion-icon slot="end" name="mic"></ion-icon>
+        </ion-range>
+
+      -->
+      <ion-range (ionChange)="rangeUmbralValue($event)" [ticks]="true" [snaps]="true" [min]="500" [max]="550" [step]="10" color="primary" value="{{ umbralValue }}"></ion-range>
+      <ion-icon slot="start" name="mic-off"></ion-icon>
+      <ion-icon slot="end" name="mic"></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <span class="umbral-value">Umbral: {{ umbralValue }}% de nivel sonoro</span>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-list *ngIf="section === 'historial'">
+
+    <ion-list-header>Seleccionar fecha para filtrar</ion-list-header>
+
+    <ion-item>
+      <ion-datetime presentation="date" [max]="currentDate()" (ionChange)="selectedDate($event)"></ion-datetime>
+    </ion-item>
+
+
+    <ion-item>
+      <h4>Historial: {{ recordText }}</h4>
+    </ion-item>
+
+    <ion-list class="list-card">
+      <ion-card *ngFor="let records of recordsRegistered" class="ion-padding">
+        <span>
+          <strong>Nivel de Sonido: </strong> {{ records.level }} dB
+          <p>
+            <strong>Fecha: </strong> {{ records.date | date: 'medium'}}
+          </p>
+        </span>
+      </ion-card>
+    </ion-list>
+
+  </ion-list>
+
+</ion-content>
