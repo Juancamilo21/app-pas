@@ -4,7 +4,8 @@ import { RangeValue } from '@ionic/core';
 import { Sections } from './section/control.section';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Path } from './path/firebase.path';
-import { Record } from './record/control.record';
+import { Record, RecorddB } from './record/control.record';
+import { BasicStatistics } from './statistics/control.statistics';
 
 @Component({
   selector: 'app-control',
@@ -13,12 +14,14 @@ import { Record } from './record/control.record';
 })
 export class ControlComponent implements OnInit {
   section: Sections = Sections.Control;
-  umbralValue: RangeValue;
+  umbralAnalog: RangeValue;
+  umbraldB: number;
   dateValue: string;
   powerValue: number;
   powerText: string;
   recordText: string;
-  recordsRegistered: Record[];
+  recordsRegistered: RecorddB[];
+  statistics: BasicStatistics;
 
   constructor(private fireDatabase: AngularFireDatabase) {}
 
@@ -54,12 +57,6 @@ export class ControlComponent implements OnInit {
    * @param event El evento de cambio de fecha
    */
   public async selectedDate(event: Event) {
-    /*this.dateValue = (event as CustomEvent).detail.value;
-    const newRecord: Record = {
-      date: this.dateValue,
-      level: Math.floor(Math.random() * 50) + 1,
-    };
-    await this.fireDatabase.list(Path.Record).push(newRecord);*/
     this.dateValue = (event as CustomEvent).detail.value;
     this.getDatesDatabase();
   }
@@ -83,7 +80,8 @@ export class ControlComponent implements OnInit {
       .object<RangeValue>(Path.Umbral)
       .valueChanges()
       .subscribe((response) => {
-        this.umbralValue = response!;
+        this.umbralAnalog = response!;
+        this.umbraldB = this.calculateDecibels(Number(this.umbralAnalog));
       });
   }
 
@@ -123,7 +121,9 @@ export class ControlComponent implements OnInit {
    * @param listRecords La lista de registros
    */
   public showRecordsDefault(date: string, listRecords: Record[]) {
-    this.recordsRegistered = this.filterDate(date, listRecords);
+    const resultFilters = this.filterDate(date, listRecords);
+    this.recordsRegistered = this.recordsdBValues(resultFilters);
+    this.statistics = this.basicStatistics(this.recordsRegistered);
     const { textDefault } = this.textRecords(this.recordsRegistered.length);
     this.recordText = textDefault;
   }
@@ -135,7 +135,10 @@ export class ControlComponent implements OnInit {
    */
   public showRecordsFilters(date: string, listRecords: Record[]) {
     const dateSelected = this.formatISODate(this.dateValue);
-    this.recordsRegistered = this.filterDate(dateSelected, listRecords);
+    const resultFilters = this.filterDate(dateSelected, listRecords);
+    this.recordsRegistered = this.recordsdBValues(resultFilters);
+    this.statistics = this.basicStatistics(this.recordsRegistered);
+    console.log(this.statistics);
     const { textDefault, textFilter } = this.textRecords(
       this.recordsRegistered.length
     );
@@ -170,6 +173,76 @@ export class ControlComponent implements OnInit {
    */
   public formatISODate(date: string) {
     return date.split('T')[0];
+  }
+
+  /**
+   * Calcula los decibelios (dB) a partir de un nivel analógico.
+   * @param level El nivel analógico para el cálculo de decibelios.
+   * @returns El valor de decibelios calculado.
+   */
+  public calculateDecibels(level: number) {
+    const min = 2900;
+    const max = 3100;
+    const valueMaxMin = max - min;
+    const volt = level * (5.0 / valueMaxMin);
+    const dB = 20 * Math.log10(volt);
+    return dB >= 0 ? Number(dB.toFixed(1)) : 0;
+  }
+
+  /**
+   * Agrega los valores de decibelios a los registros existentes.
+   * @param records Los registros a los que se les agregarán los valores de decibelios.
+   * @returns Un nuevo arreglo de registros que incluye los valores de decibelios.
+   */
+  public recordsdBValues(records: Record[]) {
+    const recordsdB: RecorddB[] = [];
+    records.forEach((record) => {
+      const dB = this.calculateDecibels(record.level);
+      recordsdB.push({ ...record, dB });
+    });
+    return recordsdB;
+  }
+
+  public basicStatistics(records: RecorddB[]): BasicStatistics {
+    const maxAnalog = this.maxLevel(records, 0, (a, b) => a > b);
+    const minAnalog = this.maxLevel(records, maxAnalog, (a, b) => a < b);
+    const rangeAnalog = this.rangeLevel(maxAnalog, minAnalog);
+    const meanAnalog = Number(this.meanLevel(records).toFixed(2));
+    const maxdB = this.calculateDecibels(maxAnalog);
+    const mindB = this.calculateDecibels(minAnalog);
+    const rangedB = this.rangeLevel(maxdB, mindB);
+    const meandB = this.calculateDecibels(meanAnalog);
+    return {
+      maxAnalog,
+      minAnalog,
+      rangeAnalog,
+      meanAnalog,
+      maxdB,
+      mindB,
+      rangedB,
+      meandB,
+    };
+  }
+
+  public maxLevel(
+    records: RecorddB[],
+    init: number,
+    compare: (a: number, b: number) => boolean
+  ) {
+    let value = init;
+    records.forEach((record) => {
+      if (compare(record.level, value)) value = record.level;
+    });
+    return value;
+  }
+
+  public rangeLevel(max: number, min: number) {
+    return max - min;
+  }
+
+  public meanLevel(records: RecorddB[]) {
+    const sum = records.reduce((total, record) => total + record.level, 0);
+    return records.length > 0 ? sum / records.length : 0;
   }
 
   /**

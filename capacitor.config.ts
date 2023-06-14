@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'app-pas',
+  appId: 'com.pas.libraryalert',
+  appName: 'Silence',
   webDir: 'www',
   server: {
     androidScheme: 'https'
