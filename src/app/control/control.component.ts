@@ -6,6 +6,7 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Path } from './path/firebase.path';
 import { Record, RecorddB } from './record/control.record';
 import { BasicStatistics } from './statistics/control.statistics';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-control',
@@ -22,6 +23,9 @@ export class ControlComponent implements OnInit {
   recordText: string;
   recordsRegistered: RecorddB[];
   statistics: BasicStatistics;
+  networkStatus: boolean;
+  showNetwork: boolean;
+  textNetwork: string;
 
   constructor(private fireDatabase: AngularFireDatabase) {}
 
@@ -29,10 +33,33 @@ export class ControlComponent implements OnInit {
    * El método ngOnInit se ejecuta al iniciar el componente e invoca los métodos para
    * obtener los valores de umbral, encendido/apagado y registros de fechas.
    */
-  ngOnInit() {
+  async ngOnInit() {
     this.getRangeValueDatabase();
     this.getPowerValueDatabase();
     this.getDatesDatabase();
+    await this.checkNetworkStatus();
+  }
+
+  public async checkNetworkStatus() {
+    if (Network) this.networkStatus = (await Network.getStatus()).connected;
+    if (!this.networkStatus) this.textNetwork = 'Esperando red';
+    this.subscribeConectionNetwork();
+  }
+
+  public subscribeConectionNetwork() {
+    Network.addListener('networkStatusChange', (status) => {
+      this.networkStatus = status.connected;
+      this.showNetwork = this.networkStatus;
+      if (!this.showNetwork) {
+        this.textNetwork = 'Esperando red';
+        return;
+      }
+      this.textNetwork = 'Conexión restablecida';
+      setTimeout(() => {
+        this.showNetwork = false;
+        this.textNetwork = '';
+      }, 5000);
+    });
   }
 
   /**
@@ -210,7 +237,7 @@ export class ControlComponent implements OnInit {
     const meanAnalog = Number(this.meanLevel(records).toFixed(2));
     const maxdB = this.calculateDecibels(maxAnalog);
     const mindB = this.calculateDecibels(minAnalog);
-    const rangedB = this.rangeLevel(maxdB, mindB);
+    const rangedB = this.calculateDecibels(rangeAnalog);
     const meandB = this.calculateDecibels(meanAnalog);
     return {
       maxAnalog,

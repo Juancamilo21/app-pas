@@ -15,12 +15,24 @@ ion-list-header, h4 {
     color: #3880ff;
 }
 
-.titles {
-    color: #000;
-}
-
 .list-card {
     height: 400px;
     overflow-y: scroll;
 }
 
+.messageNetwork {
+    margin-right: 5px;
+}
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+}
+
+.spinner-text {
+    color: #3880ff;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 800;
+    margin-right: 10px;
+}  
