@@ -40,12 +40,23 @@ export class ControlComponent implements OnInit {
     await this.checkNetworkStatus();
   }
 
+  /**
+   * Verifica el estado de la conexión de red.
+   * Si la red está disponible, establece el estado de la red como conectada.
+   * Si la red no está disponible, establece el mensaje "Esperando red".
+   * Luego, suscribe la conexión de red para escuchar los cambios de estado.
+   */
   public async checkNetworkStatus() {
     if (Network) this.networkStatus = (await Network.getStatus()).connected;
     if (!this.networkStatus) this.textNetwork = 'Esperando red';
     this.subscribeConectionNetwork();
   }
 
+  /**
+   * Suscribe la conexión de red para detectar los cambios de estado.
+   * Cuando se detecta un cambio de estado, actualiza el estado de la red y el mensaje correspondiente.
+   * Si la red se restablece, muestra el mensaje "Conexión restablecida" durante 5 segundos y luego lo oculta.
+   */
   public subscribeConectionNetwork() {
     Network.addListener('networkStatusChange', (status) => {
       this.networkStatus = status.connected;
@@ -230,6 +241,11 @@ export class ControlComponent implements OnInit {
     return recordsdB;
   }
 
+  /**
+   * Calcula las estadísticas básicas a partir de los registros de sonido.
+   * @param records Los registros de sonido.
+   * @returns Un objeto que contiene las estadísticas básicas.
+   */
   public basicStatistics(records: RecorddB[]): BasicStatistics {
     const maxAnalog = this.maxLevel(records, 0, (a, b) => a > b);
     const minAnalog = this.maxLevel(records, maxAnalog, (a, b) => a < b);
@@ -251,6 +267,13 @@ export class ControlComponent implements OnInit {
     };
   }
 
+  /**
+   * Obtiene el valor máximo y minimo de nivel analógico en los registros de sonido.
+   * @param records Los registros de sonido.
+   * @param init El valor inicial de comparación.
+   * @param compare La función de comparación para determinar el máximo y minimo.
+   * @returns El valor máximo o minimo de nivel analógico.
+   */
   public maxLevel(
     records: RecorddB[],
     init: number,
@@ -263,10 +286,21 @@ export class ControlComponent implements OnInit {
     return value;
   }
 
+  /**
+   * Calcula el rango de nivel analógico a partir del valor máximo y mínimo.
+   * @param max El valor máximo de nivel analógico.
+   * @param min El valor mínimo de nivel analógico.
+   * @returns El rango de nivel analógico.
+   */
   public rangeLevel(max: number, min: number) {
     return max - min;
   }
 
+  /**
+   * Calcula el valor medio de nivel analógico en los registros de sonido.
+   * @param records Los registros de sonido.
+   * @returns El valor medio de nivel analógico.
+   */
   public meanLevel(records: RecorddB[]) {
     const sum = records.reduce((total, record) => total + record.level, 0);
     return records.length > 0 ? sum / records.length : 0;
