@@ -6,15 +6,6 @@
 
 <ion-content class="ion-padding">
 
-  <div class="spinner-container" *ngIf="!networkStatus">
-    <p class="spinner-text">{{ textNetwork }}</p>
-    <ion-spinner name="dots" color="primary"></ion-spinner>
-  </div>
-
-  <div class="spinner-container" *ngIf="showNetwork">
-    <p class="spinner-text">{{ textNetwork }}</p>
-  </div>
-
   <ion-segment (ionChange)="segmentChanged($event)">
 
     <ion-segment-button value="control">

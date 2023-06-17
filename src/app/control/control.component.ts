@@ -6,7 +6,6 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Path } from './path/firebase.path';
 import { Record, RecorddB } from './record/control.record';
 import { BasicStatistics } from './statistics/control.statistics';
-import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-control',
@@ -23,9 +22,6 @@ export class ControlComponent implements OnInit {
   recordText: string;
   recordsRegistered: RecorddB[];
   statistics: BasicStatistics;
-  networkStatus: boolean;
-  showNetwork: boolean;
-  textNetwork: string;
 
   constructor(private fireDatabase: AngularFireDatabase) {}
 
@@ -37,41 +33,8 @@ export class ControlComponent implements OnInit {
     this.getRangeValueDatabase();
     this.getPowerValueDatabase();
     this.getDatesDatabase();
-    await this.checkNetworkStatus();
   }
 
-  /**
-   * Verifica el estado de la conexión de red.
-   * Si la red está disponible, establece el estado de la red como conectada.
-   * Si la red no está disponible, establece el mensaje "Esperando red".
-   * Luego, suscribe la conexión de red para escuchar los cambios de estado.
-   */
-  public async checkNetworkStatus() {
-    if (Network) this.networkStatus = (await Network.getStatus()).connected;
-    if (!this.networkStatus) this.textNetwork = 'Esperando red';
-    this.subscribeConectionNetwork();
-  }
-
-  /**
-   * Suscribe la conexión de red para detectar los cambios de estado.
-   * Cuando se detecta un cambio de estado, actualiza el estado de la red y el mensaje correspondiente.
-   * Si la red se restablece, muestra el mensaje "Conexión restablecida" durante 5 segundos y luego lo oculta.
-   */
-  public subscribeConectionNetwork() {
-    Network.addListener('networkStatusChange', (status) => {
-      this.networkStatus = status.connected;
-      this.showNetwork = this.networkStatus;
-      if (!this.showNetwork) {
-        this.textNetwork = 'Esperando red';
-        return;
-      }
-      this.textNetwork = 'Conexión restablecida';
-      setTimeout(() => {
-        this.showNetwork = false;
-        this.textNetwork = '';
-      }, 5000);
-    });
-  }
 
   /**
    * Cambia la sección activa, se ejecuta cuando se cambia de segmento
