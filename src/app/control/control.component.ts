@@ -6,6 +6,8 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Path } from './path/firebase.path';
 import { Record, RecorddB } from './record/control.record';
 import { BasicStatistics } from './statistics/control.statistics';
+import { Platform } from '@ionic/angular';
+import { App } from '@capacitor/app';
 
 @Component({
   selector: 'app-control',
@@ -23,7 +25,10 @@ export class ControlComponent implements OnInit {
   recordsRegistered: RecorddB[];
   statistics: BasicStatistics;
 
-  constructor(private fireDatabase: AngularFireDatabase) {}
+  constructor(
+    private fireDatabase: AngularFireDatabase,
+    private platform: Platform
+  ) {}
 
   /**
    * El método ngOnInit se ejecuta al iniciar el componente e invoca los métodos para
@@ -33,8 +38,8 @@ export class ControlComponent implements OnInit {
     this.getRangeValueDatabase();
     this.getPowerValueDatabase();
     this.getDatesDatabase();
+    this.exitApp();
   }
-
 
   /**
    * Cambia la sección activa, se ejecuta cuando se cambia de segmento
@@ -42,6 +47,13 @@ export class ControlComponent implements OnInit {
    */
   public segmentChanged(event: Event) {
     this.section = (event as CustomEvent).detail.value;
+  }
+
+  public exitApp() {
+    this.platform.backButton.subscribe(() => {
+      if (this.section === Sections.Historial) this.section = Sections.Control;
+      else App.exitApp();
+    });
   }
 
   /**
