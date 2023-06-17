@@ -1,3 +1,7 @@
+/**
+ * Interface que representa las estadísticas básicas calculadas a partir de los registros 
+ * de sonido.
+ */
 export interface BasicStatistics {
   maxAnalog: number;
   minAnalog: number;
