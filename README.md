@@ -1,13 +1,12 @@
 # Aplicación Móvil Desarrollada Con Ionic, Angular y Firebase (Realtime Database)
 
-Aplicación móvil android desarrollada con el fin de controlar un dispositivo de alarma de forma remota. Aplicando IoT (Internet de las cosas), se ha creado un dispositivo de alarma mediante arduino R3 y el modulo wifi ESP32, el cual es implemntado para el control de ruido en bibliotecas.
+Se ha desarrollado una aplicación móvil para dispositivos Android con el propósito de permitir el control remoto de un sistema de alarma. Utilizando la tecnología de IoT (Internet de las cosas), se ha creado un dispositivo de alarma utilizando Arduino R3 y el módulo Wifi ESP-32. Este dispositivo se ha diseñado específicamente para controlar el nivel de ruido en bibliotecas.
 
 * **Funciones del dispositivo:**
-Su funcionamiento esta basado en la detección de ruido mediante el sensor de sonido KY-038, al cual se le establece un umbral mediante la App móvil, este umbral al ser sobrepasado la alarma emite un sonido no intrusivo para alertar a los presentes que deben hacer silencio, puesto que, pueden perturba la tranquilidad de los presentes.
-La alarma al ser activada registra en firebase la fecha, hora y el nivel analogico del sonido que la activó, de esta manera se crea un historial de la cantidad de veces que se a activado.
+El funcionamiento de esta aplicación se basa en la detección de ruido a través de un sensor de sonido KY-038. La aplicación móvil permite establecer un umbral de sonido, y cuando este umbral se sobrepasa, se activa una alarma que emite un sonido discreto para alertar a las personas presentes, recordándoles que deben mantener silencio para no perturbar la tranquilidad del entorno. Además, cuando se activa la alarma, se registran automáticamente la fecha, hora y nivel analógico del sonido que la activó en Firebase. De esta manera, se crea un historial que muestra cuántas veces se ha activado la alarma.
 
 * **Funciones de la App:**
-La App permite apagar y encender el dispositivo, así como establecer el umbral de sonido máximo permitido, también muestra el historial registrado de la cantidad de veces diarias que se ha activado la alarma, es decir, que permite filtrar el historial por la fecha seleccionada. Además, muestra estadisticas básicas como: el nivel máximos de sonido diario, minimos, rangos y medias. Los valores mostrados estan dados en su nivel analogico y decibelios (dB).
+La aplicación ofrece varias funcionalidades, como la capacidad de encender y apagar el dispositivo, así como establecer el umbral máximo de sonido permitido. Además, muestra un historial que registra la cantidad de veces que se ha activado la alarma en un día determinado, lo que permite filtrar el historial por fecha seleccionada. Adicionalmente, la aplicación proporciona estadísticas básicas que incluyen el nivel máximo de sonido registrado en un día, los valores mínimos, el rango de valores y la media. Estas estadísticas se presentan tanto en niveles analógicos como en decibelios (dB), brindando información detallada sobre el sonido ambiente.
 
 ## Imágenes de la App
 
@@ -16,3 +15,39 @@ La App permite apagar y encender el dispositivo, así como establecer el umbral 
     <img src="img-readme/img-historial.png" alt="img-hstorial" />
     <img src="img-readme/img-statistic.png" alt="img-statistic" />
 </div>
+
+## Despues de clonar o descargar el proyecto realice lo siguiente
+
+* #### Acceder al directorio del proyecto
+
+    ```bash
+    cd app-pas
+    ```
+* #### Instalar las dependencias
+
+    ```bash
+    npm install
+    ```
+* #### Ejecutar la Aplicación
+
+    ```bash
+    ionic serve
+    ```
+## Generar la Aplicación Android
+
+Para generar la aplicación se usa capacitor que es una herramieta que permite convertir una aplicación web en una aplicación móvil android o ios, en este caso nos enfocamos en android, realice lo siguiente para generar la app.
+
+```bash
+ionic cap add android
+```
+con esto se genera la carpeta android, luego se debe crear el build del proyecto, para ello realice.
+
+```bash
+ionic cap sync
+```
+Luego se debe ejecutar la app, tenga en cuenta que debe tener Android Studio instalado en su computadora, puesto que, capacitor usa el IDE ofical de la plataforma para compilar la app, para ello realice.
+
+```bash
+ionic cap open android
+```
+Con esto se abrira Android Studio y podrá compilar la aplicación y generar el apk correspondiente.
