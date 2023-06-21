@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { RangeCustomEvent } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonSegment, RangeCustomEvent } from '@ionic/angular';
 import { RangeValue } from '@ionic/core';
 import { Sections } from './section/control.section';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
@@ -15,7 +15,8 @@ import { App } from '@capacitor/app';
   styleUrls: ['./control.component.scss'],
 })
 export class ControlComponent implements OnInit {
-  section: Sections = Sections.Control;
+  @ViewChild(IonSegment) segment: IonSegment;
+  section: Sections;
   umbralAnalog: RangeValue;
   umbraldB: number;
   dateValue: string;
@@ -34,11 +35,20 @@ export class ControlComponent implements OnInit {
    * El método ngOnInit se ejecuta al iniciar el componente e invoca los métodos para
    * obtener los valores de umbral, encendido/apagado y registros de fechas.
    */
-  async ngOnInit() {
+  ngOnInit() {
     this.getRangeValueDatabase();
     this.getPowerValueDatabase();
     this.getDatesDatabase();
-    this.exitApp();
+    this.navigatorBackButton();
+  }
+
+  /**
+   * Método del ciclo de vida que se ejecuta cuando la aplicación se ha cargado completamente y se ha convertido en la sección activa.
+   * Establece el valor del segmento en "Control" y la sección en "Control".
+   */
+  public ionViewDidEnter() {
+    this.segment.value = 'control';
+    this.section = Sections.Control;
   }
 
   /**
@@ -47,12 +57,22 @@ export class ControlComponent implements OnInit {
    */
   public segmentChanged(event: Event) {
     this.section = (event as CustomEvent).detail.value;
+    console.log(this.section);
   }
 
-  public exitApp() {
+  /**
+   * Maneja el evento del botón de retroceso del dispositivo móvil.
+   * Si la sección actual no es "Control", cambia al segmento "Control" y establece la sección en "Control".
+   * Si la sección actual es "Control", sale de la aplicación.
+   */
+  public navigatorBackButton() {
     this.platform.backButton.subscribe(() => {
-      if (this.section === Sections.Historial) this.section = Sections.Control;
-      else App.exitApp();
+      if (this.section !== Sections.Control) {
+        this.segment.value = 'control';
+        this.section = Sections.Control;
+        return;
+      }
+      App.exitApp();
     });
   }
 
@@ -69,7 +89,7 @@ export class ControlComponent implements OnInit {
    * Obtiene la fecha seleccionada en el calendario
    * @param event El evento de cambio de fecha
    */
-  public async selectedDate(event: Event) {
+  public selectedDate(event: Event) {
     this.dateValue = (event as CustomEvent).detail.value;
     this.getDatesDatabase();
   }
