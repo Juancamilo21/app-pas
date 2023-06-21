@@ -57,7 +57,6 @@ export class ControlComponent implements OnInit {
    */
   public segmentChanged(event: Event) {
     this.section = (event as CustomEvent).detail.value;
-    console.log(this.section);
   }
 
   /**
@@ -171,7 +170,6 @@ export class ControlComponent implements OnInit {
     const resultFilters = this.filterDate(dateSelected, listRecords);
     this.recordsRegistered = this.recordsdBValues(resultFilters);
     this.statistics = this.basicStatistics(this.recordsRegistered);
-    console.log(this.statistics);
     const { textDefault, textFilter } = this.textRecords(
       this.recordsRegistered.length
     );
