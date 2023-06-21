@@ -1,4 +1,4 @@
-# Aplicación Móvil Desarrollada Con Ionic, Angular y Firebase (Realtime Database)
+# Aplicación Móvil Desarrollada Con [Ionic](https://ionicframework.com/docs), [Angular](https://angular.io/docs) y [Firebase](https://firebase.google.com/?hl=es) (Realtime Database)
 
 Se ha desarrollado una aplicación móvil para dispositivos Android con el propósito de permitir el control remoto de un sistema de alarma. Utilizando la tecnología de IoT (Internet de las cosas), se ha creado un dispositivo de alarma utilizando Arduino R3 y el módulo Wifi ESP-32. Este dispositivo se ha diseñado específicamente para controlar el nivel de ruido en bibliotecas.
 
