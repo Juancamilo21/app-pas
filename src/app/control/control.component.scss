@@ -18,4 +18,16 @@ ion-list-header, h4 {
 .list-card {
     height: 400px;
     overflow-y: scroll;
-} 
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.containerLogo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

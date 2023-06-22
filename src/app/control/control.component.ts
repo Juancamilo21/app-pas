@@ -47,7 +47,7 @@ export class ControlComponent implements OnInit {
    * Establece el valor del segmento en "Control" y la sección en "Control".
    */
   public ionViewDidEnter() {
-    this.segment.value = 'control';
+    this.segment.value = Sections.Control;
     this.section = Sections.Control;
   }
 
@@ -67,7 +67,7 @@ export class ControlComponent implements OnInit {
   public navigatorBackButton() {
     this.platform.backButton.subscribe(() => {
       if (this.section !== Sections.Control) {
-        this.segment.value = 'control';
+        this.segment.value = Sections.Control;
         this.section = Sections.Control;
         return;
       }
