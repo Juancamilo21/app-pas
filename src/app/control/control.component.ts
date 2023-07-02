@@ -194,7 +194,7 @@ export class ControlComponent implements OnInit {
   public currentDate() {
     const current = new Date().toLocaleDateString('es-CO');
     const a = current.split('/').reverse();
-    return `${a[0]}-0${a[1]}-${a[2]}`;
+    return `${a[0]}-${a[1].toString().padStart(2, '0')}-${a[2].toString().padStart(2, '0')}`;
   }
 
   /**
