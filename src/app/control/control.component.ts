@@ -19,7 +19,6 @@ import { App } from '@capacitor/app';
 export class ControlComponent implements OnInit {
   @ViewChild(IonSegment) segment: IonSegment;
   @ViewChild(IonRadioGroup) radioButton: IonRadioGroup;
-  radioValue: string;
   section: Sections;
   dateValue: string;
   powerValue: number;
@@ -214,17 +213,6 @@ export class ControlComponent implements OnInit {
    */
   public formatISODate(date: string) {
     return date.split('T')[0];
-  }
-
-  /**
-   * Calcula los decibelios (dB) a partir de un nivel analógico.
-   * @param level El nivel analógico para el cálculo de decibelios.
-   * @returns El valor de decibelios calculado.
-   */
-  public calculateDecibels(level: number) {
-    const volt = level * (5.0 / level);
-    const dB = 20 * Math.log10(volt);
-    return dB >= 0 ? Number(dB.toFixed(1)) : 0;
   }
 
   /**
