@@ -15,7 +15,7 @@ La aplicación ofrece varias funcionalidades, como la capacidad de encender y ap
     <img src="img-readme/img-historial.png" alt="img-hstorial" />
 </div>
 
-## ¿Qué hacer al momento de tener acceso al directorio del proyecto?
+## ¿Qué hacer después de clonar o descargar el proyecto?
 
 * #### Establecer variables de entorno
     * Debe establecer las variables de entorno en el directorio **environments** ubicación: **src/environments/environment.prod.ts también src/enviroments/environment.ts**, **environment.prod.ts** son las varibales de producción y **environment.ts** las de desarrollo, debe proporcionar el **firebaseConfig** en ambos.
