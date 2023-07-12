@@ -17,6 +17,17 @@ La aplicación ofrece varias funcionalidades, como la capacidad de encender y ap
 
 ## ¿Qué hacer después de clonar o descargar el proyecto?
 
+* #### Acceder al directorio del proyecto
+
+    ```bash
+    cd app-pas
+    ```
+* #### Instalar las dependencias
+
+    ```bash
+    npm install
+    ```
+    
 * #### Establecer variables de entorno
     * Debe establecer las variables de entorno en el directorio **environments** ubicación: **src/environments/environment.prod.ts también src/enviroments/environment.ts**, **environment.prod.ts** son las varibales de producción y **environment.ts** las de desarrollo, debe proporcionar el **firebaseConfig** en ambos.
 
@@ -35,16 +46,7 @@ La aplicación ofrece varias funcionalidades, como la capacidad de encender y ap
         }
     };
     ```
-* #### Acceder al directorio del proyecto
-
-    ```bash
-    cd app-pas
-    ```
-* #### Instalar las dependencias
-
-    ```bash
-    npm install
-    ```
+    
 * #### Ejecutar la Aplicación
 
     ```bash
