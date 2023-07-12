@@ -33,7 +33,7 @@ La aplicación ofrece varias funcionalidades, como la capacidad de encender y ap
 
     ```typescript
     export const environment = {
-        production: true,
+        production: true, // true si es en producción y false si es en desarrollo
         firebaseConfig: {
             apiKey: 'myApiKey',
             authDomain: 'myAuthDomain',
