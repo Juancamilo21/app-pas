@@ -18,7 +18,7 @@ La aplicación ofrece varias funcionalidades, como la capacidad de encender y ap
 ## ¿Qué hacer al momento de tener acceso al directorio del proyecto?
 
 * #### Establecer variables de entorno
-    * Debe establecer las variables de entorno en el directorio **environments** ubicación: **src>environments>environment.prod.ts también src>enviroments>environment.ts**, **environment.prod.ts** son las varibales de producción y **envoronment.ts** las de desarrollo, debe proporcionar el **firebaseConfig** en ambos.
+    * Debe establecer las variables de entorno en el directorio **environments** ubicación: **src>environments>environment.prod.ts también src>enviroments>environment.ts**, **environment.prod.ts** son las varibales de producción y **environment.ts** las de desarrollo, debe proporcionar el **firebaseConfig** en ambos.
 
     ```typescript
     export const environment = {
